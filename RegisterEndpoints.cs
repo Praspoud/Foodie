@@ -1,4 +1,5 @@
-﻿using Foodie.Apis.User;
+﻿using Foodie.Apis.Admin;
+using Foodie.Apis.User;
 
 namespace Foodie
 {
@@ -7,6 +8,7 @@ namespace Foodie
         public static void RegisterApi(this WebApplication app)
         {
             UserApi.RegisterApi(app);
+            AdminApi.RegisterApi(app);
         }
     }
 }
