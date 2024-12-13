@@ -321,7 +321,7 @@ namespace Foodie.Services.User
                 {
                 Bio.UserId = data.Id;
                 Bio.Bio = data.Bio;
-
+                _userBioService.Update(Bio);
                 }
                 var result = _userService.Update(user);
 
