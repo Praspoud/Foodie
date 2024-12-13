@@ -13,6 +13,7 @@ namespace Foodie.Services.User
     {
         private readonly IServiceFactory _factory;
         private readonly IServiceRepository<EUsers> _userService;
+        private readonly IServiceRepository<EUsersBio> _userBioService;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -21,6 +22,7 @@ namespace Foodie.Services.User
         {
             _factory = factory;
             _userService = _factory.GetInstance<EUsers>();
+            _userBioService = _factory.GetInstance<EUsersBio>();
             _configuration = congf;
             _httpContextAccessor = httpContextAccessor;
             _passwordHistService = _factory.GetInstance<EPasswordHist>();
@@ -261,6 +263,93 @@ namespace Foodie.Services.User
                 };
             }
 
+        }
+
+        public IResult<int> Update(UserUpdateVM data, int userId)
+        {
+            try
+            {
+                var UserWithSameUserName = _userService.List().FirstOrDefault(x => x.UserName == data.UserName);
+                if (UserWithSameUserName != null && UserWithSameUserName.Id != data.Id)
+                {
+                    return new IResult<int>
+                    {
+                        Data = 0,
+                        Status = ResultStatus.Failure,
+                        Message = "Username already Used"
+                    };
+                }
+
+                if (string.IsNullOrEmpty(data.UserName))
+                {
+                    return new IResult<int>
+                    {
+                        Status = ResultStatus.Failure,
+                        Message = "Data Cannot Be Null"
+                    };
+                }
+                //var UserWithSameEmail = _userService.List().FirstOrDefault(x => x.EmailAddress == data.EmailAddress);
+                var user = _userService.List().FirstOrDefault(x => x.Id == data.Id);
+                //if (user.EmailAddress != data.EmailAddress)
+                //{
+                //    if (UserWithSameEmail.EmailAddress == data.EmailAddress)
+                //    {
+                //        return new IResult<int>
+                //        {
+                //            Data = 0,
+                //            Status = ResultStatus.Failure,
+                //            Message = "Email already in use by another user"
+                //        };
+                //    }
+                //}
+                user.UserName = data.UserName;
+                //user.EmailAddress = data.EmailAddress;
+                user.FirstName = data.FirstName;
+                user.LastName = data.LastName;
+                
+                var Bio = _userBioService.List().Include(x => x.Users).FirstOrDefault(x => x.UserId == data.Id);
+                if (Bio == null)
+                {
+                    Bio = new EUsersBio
+                    {
+                        UserId = data.Id,
+                        Bio = data.Bio
+                    };
+                    _userBioService.Add(Bio);
+                }
+                else
+                {
+                Bio.UserId = data.Id;
+                Bio.Bio = data.Bio;
+
+                }
+                var result = _userService.Update(user);
+
+                if (result.Id > 0)
+                {
+                    return new IResult<int>
+                    {
+                        Data = result.Id,
+                        Status = ResultStatus.Success,
+                        Message = "User Updated Successfully"
+                    };
+                }
+                return new IResult<int>
+                {
+                    Data = 0,
+                    Status = ResultStatus.Failure,
+                    Message = "Error While Updating User"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new IResult<int>
+                {
+                    Data = 0,
+                    Status = ResultStatus.Failure,
+                    Message = "Some Error Occured"
+                };
+            }
         }
     }
 }

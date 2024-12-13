@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Foodie.Common;
 using Foodie.Services.User;
 using static Foodie.Services.User.ViewModels.UserVM;
+using Foodie.Utilities;
 
 namespace Foodie.Apis.User
 {
@@ -16,7 +17,7 @@ namespace Foodie.Apis.User
             //app.MapPost(root + "verifyOtp", VerifyOtp).AllowAnonymous();
             //app.MapPost(root + "changePassword", ChangePassword);
             app.MapPost(root + "signup", SignUp).AllowAnonymous();
-            //app.MapPut(root, Update);
+            app.MapPut(root, Update);
             //app.MapPut(root + "StatusChange", UpdateUserStatus);
             //app.MapGet(root, Get);
             //app.MapGet(root + "List", List);
@@ -31,6 +32,11 @@ namespace Foodie.Apis.User
         private static IResult<string> Login(LoginVM data, IUserService service, IConfiguration config)
         {
             return service.Login(data, config);
+        }
+
+        private static IResult<int> Update(IUserService service, IFoodieSessionAccessor accessor, UserUpdateVM data)
+        {
+            return service.Update(data, accessor.UserId);
         }
     }
 }

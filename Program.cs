@@ -1,6 +1,7 @@
 using Foodie;
 using Foodie.Common.Services;
 using Foodie.Models;
+using Foodie.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,11 +24,14 @@ builder.Services.AddDbContext<FoodieDbContext>(db =>
 builder.Services.AddControllers();
 builder.Services.AddTransient<IServiceFactory, ServiceFactory>();
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddTransient<IFoodieSessionAccessor, FoodieSessionAccessor>();
 //builder.Services.AddTransient<IRiddhaSessionAccessor, RiddhaSessionAccessor>();
 builder.RegisterServices();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+RegisterJWTBearer.Register(builder);
 
 var app = builder.Build();
 

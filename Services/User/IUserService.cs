@@ -10,7 +10,7 @@ namespace Foodie.Services.User
         //IResult<string> ForgotPassword(ForgotPasswordVM data);
         //IResult<string> VerifyOtp(VerifyOtpVM data);
         IResult<int> SignUp(UserRegistrationVM data);
-        //IResult<int> Update(UserRegistrationVM data, int userId);
+        IResult<int> Update(UserUpdateVM data, int userId);
         //IResult<int> UpdateUserStatus(int StatusChangeId, int userId);
         //IResult<UserRegistrationVM> Get(int userId);
         //IResult<string> ChangePassword(ChangePasswordVM data, int userId, IConfiguration config);
