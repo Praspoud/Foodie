@@ -351,5 +351,47 @@ namespace Foodie.Services.User
                 };
             }
         }
+
+        public IResult<UserUpdateVM> Get(int userId)
+        {
+            //IServiceRepository<EUserStatusUpdate> userStatusService = _factory.GetInstance<EUserStatusUpdate>();
+            try
+            {
+                var user = _userService.Find(userId);
+                var userBio = _userBioService.FindByName(x => x.UserId == userId);
+                //var userBio = _userBioService.Find(userId);
+                //var userStatus = userStatusService.List().FirstOrDefault(x => x.UserId == user.Id);
+                if (user != null)
+                {
+                    var data = new UserUpdateVM()
+                    {
+                        Id = user.Id,
+                        UserName = user.UserName,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Bio = userBio.Bio,
+                    };
+                    return new IResult<UserUpdateVM>()
+                    {
+                        Data = data,
+                        Status = ResultStatus.Success,
+                        Message = "User retrievied successfully"
+                    };
+                }
+                return new IResult<UserUpdateVM>()
+                {
+                    Status = ResultStatus.Failure,
+                    Message = "User not found"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new IResult<UserUpdateVM>()
+                {
+                    Status = ResultStatus.Failure,
+                    Message = "Error while retrieving user"
+                };
+            }
+        }
     }
 }

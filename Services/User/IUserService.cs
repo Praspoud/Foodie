@@ -12,7 +12,7 @@ namespace Foodie.Services.User
         IResult<int> SignUp(UserRegistrationVM data);
         IResult<int> Update(UserUpdateVM data, int userId);
         //IResult<int> UpdateUserStatus(int StatusChangeId, int userId);
-        //IResult<UserRegistrationVM> Get(int userId);
+        IResult<UserUpdateVM> Get(int userId);
         //IResult<string> ChangePassword(ChangePasswordVM data, int userId, IConfiguration config);
         //IResult<ListVM<UserRegistrationVM>> List(string name, OrderBy orderBy, int skip, int take);
         //IResult<bool> Delete(int id, int userId);

@@ -19,7 +19,7 @@ namespace Foodie.Apis.User
             app.MapPost(root + "signup", SignUp).AllowAnonymous();
             app.MapPut(root, Update);
             //app.MapPut(root + "StatusChange", UpdateUserStatus);
-            //app.MapGet(root, Get);
+            app.MapGet(root, Get);
             //app.MapGet(root + "List", List);
             //app.MapDelete(root, Delete);
         }
@@ -37,6 +37,11 @@ namespace Foodie.Apis.User
         private static IResult<int> Update(IUserService service, IFoodieSessionAccessor accessor, UserUpdateVM data)
         {
             return service.Update(data, accessor.UserId);
+        }
+
+        private static IResult<UserUpdateVM> Get(IUserService service, int userId)
+        {
+            return service.Get(userId);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Foodie.Models;
+﻿using System.Linq;
+using System.Linq.Expressions;
+using Foodie.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Foodie.Common.Services
@@ -11,6 +13,7 @@ namespace Foodie.Common.Services
         public int Remove(t model);
         public int Delete(int id);
         public t Find(int id);
+        t FindByName(Expression<Func<t, bool>> predicate);
         public int AddRange(List<t> models);
         public int RemoveRange(List<t> models);
     }
@@ -97,6 +100,19 @@ namespace Foodie.Common.Services
                 throw ex;
             }
         }
+
+        public t FindByName(Expression<Func<t, bool>> predicate)
+        {
+            try
+            {
+                return entity.AsNoTracking().FirstOrDefault(predicate);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public int AddRange(List<t> models)
         {
             try
