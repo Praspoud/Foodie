@@ -369,7 +369,7 @@ namespace Foodie.Services.User
                         UserName = user.UserName,
                         FirstName = user.FirstName,
                         LastName = user.LastName,
-                        Bio = userBio.Bio,
+                        Bio = userBio?.Bio,
                     };
                     return new IResult<UserUpdateVM>()
                     {
