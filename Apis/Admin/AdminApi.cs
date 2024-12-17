@@ -1,4 +1,4 @@
-﻿using Foodie.Common;
+﻿using Foodie.Common.Models;
 using Foodie.Services.Admin;
 using Foodie.Services.User;
 using static Foodie.Services.User.ViewModels.UserVM;

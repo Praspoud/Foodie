@@ -1,11 +1,11 @@
 ﻿using System.Security.Cryptography;
-using Foodie.Common;
 using System.Text.RegularExpressions;
 using Foodie.Common.Services;
 using Foodie.Models;
 using Microsoft.VisualBasic;
 using static Foodie.Services.User.ViewModels.UserVM;
 using Microsoft.EntityFrameworkCore;
+using Foodie.Common.Models;
 
 namespace Foodie.Services.User
 {

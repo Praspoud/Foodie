@@ -1,9 +1,9 @@
 ﻿using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Collections.Generic;
-using Foodie.Common;
 using Foodie.Services.User;
 using static Foodie.Services.User.ViewModels.UserVM;
 using Foodie.Utilities;
+using Foodie.Common.Models;
 
 namespace Foodie.Apis.User
 {

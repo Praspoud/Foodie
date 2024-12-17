@@ -1,4 +1,5 @@
 ﻿using Foodie.Services.Admin;
+using Foodie.Services.Restaurant;
 using Foodie.Services.User;
 
 namespace Foodie
@@ -9,6 +10,7 @@ namespace Foodie
         {
             builder.Services.AddTransient<IUserService, UserService>();
             builder.Services.AddTransient<IAdminService, AdminService>();
+            builder.Services.AddTransient<IRestaurantService, RestaurantService>();
         }
     }
 }

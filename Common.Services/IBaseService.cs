@@ -1,4 +1,6 @@
-﻿namespace Foodie.Common.Services
+﻿using Foodie.Common.Models;
+
+namespace Foodie.Common.Services
 {
     public abstract class IBaseService
     {

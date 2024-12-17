@@ -1,4 +1,5 @@
 ﻿using Foodie.Apis.Admin;
+using Foodie.Apis.Restaurant;
 using Foodie.Apis.User;
 
 namespace Foodie
@@ -9,6 +10,7 @@ namespace Foodie
         {
             UserApi.RegisterApi(app);
             AdminApi.RegisterApi(app);
+            RestaurantApi.RegisterApi(app);
         }
     }
 }

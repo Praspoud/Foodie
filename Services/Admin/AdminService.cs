@@ -1,4 +1,4 @@
-﻿using Foodie.Common;
+﻿using Foodie.Common.Models;
 using Foodie.Common.Services;
 using Foodie.Models;
 using Microsoft.EntityFrameworkCore;

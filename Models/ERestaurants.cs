@@ -14,9 +14,31 @@ namespace Foodie.Models
         [MaxLength(50)]
         public string RestaurantName { get; set; }
 
-        //[Column("restaurant_website")]
-        //[MaxLength(50)]
-        //public string RestaurantWebsite { get; set; }
+        [Column("restaurant_address")]
+        [MaxLength(255)]
+        public string RestaurantAddress { get; set; }
+
+        [Column("latitude")]
+        public decimal Latitude { get; set; }
+
+        [Column("longitude")]
+        public decimal Longitude { get; set; }
+
+        //[Column("opening_time")]
+        //[MaxLength(10)]
+        //public string OpeningTime { get; set; }
+        
+        //[Column("closing_time")]
+        //[MaxLength(10)]
+        //public string ClosingTime { get; set; }
+
+        [Column("restaurant_website")]
+        [MaxLength(50)]
+        public string RestaurantWebsite { get; set; }
+        
+        [Column("restaurant_contact")]
+        [MaxLength(15)]
+        public string RestaurantContact { get; set; }
 
     }
 }

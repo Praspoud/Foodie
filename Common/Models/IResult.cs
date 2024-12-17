@@ -1,4 +1,4 @@
-﻿namespace Foodie.Common
+﻿namespace Foodie.Common.Models
 {
     public class IResult<t>
     {

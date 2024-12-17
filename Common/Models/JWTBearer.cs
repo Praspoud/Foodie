@@ -4,11 +4,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Foodie.Common
+namespace Foodie.Common.Models
 {
     public static class JWTBearer
     {
-        public static string CreateBearerToken(EUsers user,IConfiguration config)
+        public static string CreateBearerToken(EUsers user, IConfiguration config)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = Encoding.UTF8.GetBytes(config["JWT:Key"]);
