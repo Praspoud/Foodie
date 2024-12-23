@@ -6,6 +6,7 @@ using Microsoft.VisualBasic;
 using static Foodie.Services.User.ViewModels.UserVM;
 using Microsoft.EntityFrameworkCore;
 using Foodie.Common.Models;
+using Foodie.Services.Restaurant.ViewModels;
 
 namespace Foodie.Services.User
 {
@@ -390,6 +391,46 @@ namespace Foodie.Services.User
                 {
                     Status = ResultStatus.Failure,
                     Message = "Error while retrieving user"
+                };
+            }
+        }
+
+        public IResult<ListVM<UserUpdateVM>> List(string search, int skip, int take)
+        {
+            try
+            {
+                List<UserUpdateVM> list = new List<UserUpdateVM>();
+                var users = _userService.List()
+                    .Where(x => x.UserName.ToLower().Contains(search.ToLower()));
+                var usersList = users.Skip(skip).Take(take)
+                    .Select(users => new UserUpdateVM
+                    {
+                        Id = users.Id,
+                        UserName = users.UserName,
+                        FirstName = users.FirstName,
+                        LastName = users.LastName,
+                    }).ToList();
+
+                list.AddRange(usersList);
+
+                var data = new ListVM<UserUpdateVM>()
+                {
+                    List = list,
+                    Count = users.Count()
+                };
+                return new IResult<ListVM<UserUpdateVM>>()
+                {
+                    Data = data,
+                    Status = ResultStatus.Success,
+                    Message = "Users retrieved successfully"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new IResult<ListVM<UserUpdateVM>>()
+                {
+                    Status = ResultStatus.Failure,
+                    Message = "Error while retrieving users"
                 };
             }
         }
