@@ -25,6 +25,52 @@ namespace Foodie.Services.Restaurant
             _fileUpload = fileUpload;
         }
 
+        public IResult<RestaurantVM> Get(int restaurantId)
+        {
+            try
+            {
+                var Restaurants = _restaurantService.FindByName(x => x.RestaurantId == restaurantId);
+                var hostAddress = _fileUpload.GetLocalIPAddress();
+
+                if (Restaurants != null)
+                {
+                    var result = new RestaurantVM
+                    {
+                        Id = Restaurants.Id,
+                        RestaurantId = Restaurants.RestaurantId,
+                        RestaurantName = Restaurants.RestaurantName,
+                        RestaurantAddress = Restaurants.RestaurantAddress,
+                        Latitude = Restaurants.Latitude,
+                        Longitude = Restaurants.Longitude,
+                        RestaurantWebsite = Restaurants.RestaurantWebsite,
+                        RestaurantContact = Restaurants.RestaurantContact,
+                        RestaurantMapLink = Restaurants.RestaurantMapLink,
+                        RestaurantDescription = Restaurants.RestaurantDescription,
+                        ImageUrl = string.IsNullOrWhiteSpace(Restaurants.ImageUrl) ? null : hostAddress + "/" + Restaurants.ImageUrl,
+                    };
+                    return new IResult<RestaurantVM>
+                    {
+                        Data = result,
+                        Message = "Restaurant retrieved successfully.",
+                        Status = ResultStatus.Success
+                    };
+                }
+                return new IResult<RestaurantVM>
+                {
+                    Message = "Restaurant not found.",
+                    Status = ResultStatus.Failure
+                };
+            }
+            catch (Exception ex)
+            {
+                return new IResult<RestaurantVM>
+                {
+                    Status = ResultStatus.Failure,
+                    Message = "Failed to retrieve Restaurant."
+                };
+            }
+        }
+
         public IResult<int> Add(RestaurantVM model)
         {
             try
@@ -78,7 +124,7 @@ namespace Foodie.Services.Restaurant
                     .Select(Restaurants => new RestaurantVM
                     {
                         Id = Restaurants.Id,
-                        RestaurantId = Restaurants.Id,
+                        RestaurantId = Restaurants.RestaurantId,
                         RestaurantName = Restaurants.RestaurantName,
                         RestaurantAddress = Restaurants.RestaurantAddress,
                         Latitude = Restaurants.Latitude,

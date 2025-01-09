@@ -12,6 +12,7 @@ namespace Foodie.Apis.Restaurant
         {
             var root = "api/restaurant/";
             app.MapPost(root, Add);
+            app.MapGet(root, Get);
             app.MapGet(root + "list/", List);
         }
         private static IResult<int> Add(HttpRequest request, IRestaurantService service, IFoodieSessionAccessor accessor, RestaurantVM model)
@@ -23,6 +24,10 @@ namespace Foodie.Apis.Restaurant
             //model.RestaurantName = Name;
             //model.RestaurantAddress = Address;
             return service.Add(model);
+        }
+        private static IResult<RestaurantVM> Get(IRestaurantService service, int Id)
+        {
+            return service.Get(Id);
         }
 
         private static IResult<ListVM<RestaurantVM>> List(IRestaurantService service, string search = "", int skip = 0, int take = 10)
