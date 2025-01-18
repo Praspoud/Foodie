@@ -1,4 +1,5 @@
 ﻿using Foodie.Common.Models;
+using Foodie.Models;
 using Foodie.Services.Restaurant;
 using Foodie.Services.Restaurant.ViewModels;
 using Foodie.Utilities;
@@ -15,14 +16,18 @@ namespace Foodie.Apis.Restaurant
             app.MapGet(root, Get);
             app.MapGet(root + "list/", List);
         }
-        private static IResult<int> Add(HttpRequest request, IRestaurantService service, IFoodieSessionAccessor accessor, RestaurantVM model)
+        private static IResult<int> Add(HttpRequest request, IRestaurantService service, IFoodieSessionAccessor accessor, string Name, string Address, decimal Longitude, decimal Latitude, string Website, string Contact, string MapLink, string Description)
         {
-            //RestaurantVM model = new();
-            //model.Image = (request.Form.Files.Count > 0) ? request.Form.Files[0] : null;
-            //model.Longitude = Longitude;
-            //model.Latitude = Latitude;
-            //model.RestaurantName = Name;
-            //model.RestaurantAddress = Address;
+            RestaurantVM model = new();
+            model.Image = (request.Form.Files.Count > 0) ? request.Form.Files[0] : null;
+            model.Longitude = Longitude;
+            model.Latitude = Latitude;
+            model.RestaurantName = Name;
+            model.RestaurantAddress = Address;
+            model.RestaurantWebsite = Website;
+            model.RestaurantContact = Contact;
+            model.RestaurantMapLink = MapLink;
+            model.RestaurantDescription = Description;
             return service.Add(model);
         }
         private static IResult<RestaurantVM> Get(IRestaurantService service, int Id)
