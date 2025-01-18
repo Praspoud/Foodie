@@ -3,27 +3,25 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Foodie.Models
 {
-    [Table("user_posts")]
-    public class EUserPosts
+    [Table("user_tags")]
+    public class EUserTags
     {
         [Key]
         [Column("id")]
         public int Id { get; set; }
 
-        [Column("user_id")]
+        [Column("post_id")]
+        [ForeignKey("UserPosts")]
+        public int PostId { get; set; }
+
+        [Column("tagged_user_id")]
         [ForeignKey("Users")]
-        public int UserId { get; set; }
-
-        [Column("content")]
-        [MaxLength(255)]
-        public string Content { get; set; }
-
-        [Column("media_url")]
-        public string? MediaUrl { get; set; }
+        public int TaggedUserId { get; set; }
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
 
+        public virtual EUserPosts UserPosts { get; set; }
         public virtual EUsers Users { get; set; }
     }
 }
