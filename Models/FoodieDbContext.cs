@@ -24,5 +24,6 @@ namespace Foodie.Models
         public DbSet<ERestaurants> Restaurants { get; set; }
         public DbSet<EUsersBio> UsersBio { get; set; }
         //public DbSet<EOtp> Otp { get; set; }
+        public DbSet<EUserPosts> UsersPosts { get; set; }
     }
 }
