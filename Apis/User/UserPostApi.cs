@@ -13,8 +13,9 @@ namespace Foodie.Apis.User
             app.MapPost(root, CreatePost);
         }
 
-        private static IResult<int> CreatePost(IUserPostService service, IFoodieSessionAccessor accessor, UserPostVM model)
+        private static IResult<int> CreatePost(HttpRequest request, IUserPostService service, IFoodieSessionAccessor accessor, UserPostVM model)
         {
+            model.MediaFile = (request.Form.Files.Count > 0) ? request.Form.Files[0] : null;
             return service.CreatePost(model, accessor.UserId);
         }
     }
