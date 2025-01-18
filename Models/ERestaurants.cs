@@ -11,7 +11,7 @@ namespace Foodie.Models
         public int Id { get; set; }
 
         [Column("restaurant_id")]
-        public int RestaurantId { get; set; }
+        public string RestaurantId { get; set; }
 
         [Column("restaurant_name")]
         [MaxLength(50)]

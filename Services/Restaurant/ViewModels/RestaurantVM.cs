@@ -3,7 +3,7 @@
     public class RestaurantVM
     {
         public int Id { get; set; }
-        public int RestaurantId { get; set; }
+        public string RestaurantId { get; set; }
         public string RestaurantName { get; set; }
         public string RestaurantAddress { get; set; }
         public decimal Latitude { get; set; }

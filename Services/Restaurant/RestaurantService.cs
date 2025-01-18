@@ -25,7 +25,7 @@ namespace Foodie.Services.Restaurant
             _fileUpload = fileUpload;
         }
 
-        public IResult<RestaurantVM> Get(int restaurantId)
+        public IResult<RestaurantVM> Get(string restaurantId)
         {
             try
             {
