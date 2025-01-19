@@ -19,7 +19,15 @@ namespace Foodie.Apis.Restaurant
         private static IResult<int> Add(HttpRequest request, IRestaurantService service, IFoodieSessionAccessor accessor, string RestaurantId, string Name, string Address, decimal Longitude, decimal Latitude, string Website, string Contact, string MapLink, string Description)
         {
             RestaurantVM model = new();
-            model.Image = (request.Form.Files.Count > 0) ? request.Form.Files[0] : null;
+            if (request.HasFormContentType && request.Form.Files.Count > 0)
+            {
+                model.Image = request.Form.Files[0];
+            }
+            else
+            {
+                model.Image = null; // No image uploaded
+            }
+            //model.Image = (request.Form.Files.Count > 0) ? request.Form.Files[0] : null;
             model.RestaurantId = RestaurantId;
             model.Longitude = Longitude;
             model.Latitude = Latitude;
