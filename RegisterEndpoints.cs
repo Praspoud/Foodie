@@ -14,6 +14,7 @@ namespace Foodie
             RestaurantApi.RegisterApi(app);
             UserPostApi.RegisterApi(app);
             PostLikeApi.RegisterApi(app);
+            PostCommentApi.RegisterApi(app);
         }
     }
 }

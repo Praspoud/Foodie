@@ -152,7 +152,7 @@ namespace Foodie.Services.Restaurant
                 return new IResult<ListVM<RestaurantVM>>
                 {
                     Status = ResultStatus.Failure,
-                    Message = "Failed to retrieve charging stations."
+                    Message = "Failed to retrieve restaurants."
                 };
             }
         }

@@ -15,6 +15,7 @@ namespace Foodie
             builder.Services.AddTransient<IRestaurantService, RestaurantService>();
             builder.Services.AddTransient<IUserPostService, UserPostService>();
             builder.Services.AddTransient<IPostLikeService, PostLikeService>();
+            builder.Services.AddTransient<IPostCommentService, PostCommentService>();
             builder.Services.AddSingleton<FileUpload>();
         }
     }
