@@ -1,5 +1,6 @@
 ﻿using Foodie.Common.Services;
 using Foodie.Services.Admin;
+using Foodie.Services.Post;
 using Foodie.Services.Restaurant;
 using Foodie.Services.User;
 
@@ -13,6 +14,7 @@ namespace Foodie
             builder.Services.AddTransient<IAdminService, AdminService>();
             builder.Services.AddTransient<IRestaurantService, RestaurantService>();
             builder.Services.AddTransient<IUserPostService, UserPostService>();
+            builder.Services.AddTransient<IPostLikeService, PostLikeService>();
             builder.Services.AddSingleton<FileUpload>();
         }
     }

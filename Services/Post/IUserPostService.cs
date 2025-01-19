@@ -1,7 +1,7 @@
 ﻿using Foodie.Common.Models;
-using Foodie.Services.User.ViewModels;
+using Foodie.Services.Post.ViewModels;
 
-namespace Foodie.Services.User
+namespace Foodie.Services.Post
 {
     public interface IUserPostService
     {

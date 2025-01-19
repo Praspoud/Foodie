@@ -3,12 +3,12 @@ using System.Diagnostics.Eventing.Reader;
 using Foodie.Common.Models;
 using Foodie.Common.Services;
 using Foodie.Models;
-using Foodie.Services.User.ViewModels;
+using Foodie.Services.Post.ViewModels;
 using Lucene.Net.Support;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 
-namespace Foodie.Services.User
+namespace Foodie.Services.Post
 {
     public class UserPostService : IUserPostService
     {

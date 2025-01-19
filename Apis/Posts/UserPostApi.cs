@@ -1,17 +1,17 @@
 ﻿using Foodie.Common.Models;
-using Foodie.Services.User;
-using Foodie.Services.User.ViewModels;
+using Foodie.Services.Post;
+using Foodie.Services.Post.ViewModels;
 using Foodie.Utilities;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Foodie.Apis.User
+namespace Foodie.Apis.Posts
 {
     public static class UserPostApi
     {
         public static void RegisterApi(this WebApplication app)
         {
-            var root = "api/user/posts";
-            app.MapPost(root, CreatePost).DisableAntiforgery(); ;
+            var root = "api/user/post";
+            app.MapPost(root, CreatePost).DisableAntiforgery();
         }
 
         private static IResult<int> CreatePost(HttpRequest request, IUserPostService service, IFoodieSessionAccessor accessor, [FromForm] string Content, [FromForm] List<int> TaggedUserIds, [FromForm] List<string> Hashtags)
@@ -32,7 +32,7 @@ namespace Foodie.Apis.User
                 Content = content,
                 TaggedUserIds = taggedUserIds,
                 Hashtags = hashtags,
-                MediaFile = (request.Form.Files.Count > 0) ? request.Form.Files[0] : null
+                MediaFile = request.Form.Files.Count > 0 ? request.Form.Files[0] : null
             };
 
             return service.CreatePost(model, accessor.UserId);

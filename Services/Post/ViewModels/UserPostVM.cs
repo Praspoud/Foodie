@@ -1,4 +1,4 @@
-﻿namespace Foodie.Services.User.ViewModels
+﻿namespace Foodie.Services.Post.ViewModels
 {
     public class UserPostVM
     {
