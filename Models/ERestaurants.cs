@@ -50,6 +50,9 @@ namespace Foodie.Models
         [MaxLength(256)]
         public string RestaurantDescription { get; set; }
 
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
+
         [Column("image_url")]
         public string? ImageUrl { get; set; }
 

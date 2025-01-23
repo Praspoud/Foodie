@@ -17,6 +17,11 @@ namespace Foodie.Models
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<EPostMedia>()
+                .HasOne(pm => pm.UserPosts)
+                .WithMany(ep => ep.Media)
+                .HasForeignKey(pm => pm.PostId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         public DbSet<EUsers> Users { get; set; }
@@ -25,6 +30,7 @@ namespace Foodie.Models
         public DbSet<EUsersBio> UsersBio { get; set; }
         //public DbSet<EOtp> Otp { get; set; }
         public DbSet<EUserPosts> UserPosts { get; set; }
+        public DbSet<EPostMedia> PostMedia { get; set; }
         public DbSet<EUserTags> UserTags { get; set; }
         public DbSet<EHashTags> HashTags { get; set; }
         public DbSet<EPostHashTags> PostHashTags { get; set; }
