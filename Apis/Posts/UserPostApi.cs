@@ -67,9 +67,9 @@ namespace Foodie.Apis.Posts
             return service.GetPostById(postId);
         }
         
-        private static IResult<ListVM<UserPostVM>> GetUserPosts(IUserPostService service, int userId, int skip = 1, int take = 10)
+        private static IResult<ListVM<UserPostVM>> GetUserPosts(IUserPostService service, IFoodieSessionAccessor accessor, int skip = 1, int take = 10)
         {
-            return service.GetUserPosts(userId, skip, take);
+            return service.GetUserPosts(accessor.UserId, skip, take);
         }
 
         private static IResult<int> UpdatePost(HttpRequest request, IUserPostService service, IFoodieSessionAccessor accessor, int postId, [FromForm] string? Content, [FromForm] List<int>? TaggedUserIds, [FromForm] List<string>? Hashtags, [FromForm] List<IFormFile>? Files)
