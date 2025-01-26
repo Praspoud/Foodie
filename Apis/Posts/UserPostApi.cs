@@ -16,9 +16,10 @@ namespace Foodie.Apis.Posts
             var root = "api/user/post";
             app.MapPost(root, CreatePost).DisableAntiforgery();
             app.MapGet(root, GetPostById);
-            app.MapGet(root + "/feed", GetUserPosts);
+            app.MapGet(root + "/userpost", GetUserPosts);
             app.MapPut(root + "/update", UpdatePost).DisableAntiforgery();
             app.MapDelete(root, DeletePost);
+            app.MapGet(root + "/feed", GetFeed);
         }
 
         private static IResult<int> CreatePost(HttpRequest request, IUserPostService service, IFoodieSessionAccessor accessor,
@@ -140,6 +141,11 @@ namespace Foodie.Apis.Posts
         private static IResult<bool> DeletePost(IUserPostService service, IFoodieSessionAccessor accessor, int postId)
         {
             return service.DeletePost(postId, accessor.UserId);
+        }
+
+        private static IResult<ListVM<UserPostVM>> GetFeed(IUserPostService service, IFoodieSessionAccessor accessor, int skip = 1, int take = 10)
+        {
+            return service.GetFeed(accessor.UserId, skip, take);
         }
     }
 }

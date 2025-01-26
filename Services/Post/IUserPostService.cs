@@ -10,5 +10,6 @@ namespace Foodie.Services.Post
         IResult<ListVM<UserPostVM>> GetUserPosts(int userId, int page, int pageSize);
         IResult<int> UpdatePost(int postId, UserCreatePostVM model, int userId);
         IResult<bool> DeletePost(int postId, int userId);
+        IResult<ListVM<UserPostVM>> GetFeed(int userId, int page, int pageSize);
     }
 }

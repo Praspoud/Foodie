@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
+using System.Security.Claims;
 using Foodie.Common.Models;
 using Foodie.Common.Services;
+using Foodie.Migrations;
 using Foodie.Models;
 using Foodie.Services.Post.ViewModels;
 using Foodie.Services.Restaurant.ViewModels;
 using Foodie.Services.User.ViewModels;
 using Lucene.Net.Support;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 
@@ -20,6 +23,7 @@ namespace Foodie.Services.Post
         private readonly IServiceRepository<EHashTags> _hashTagsService;
         private readonly IServiceRepository<EPostHashTags> _postHashTagsService;
         private readonly IServiceRepository<ERestaurantRatings> _restaurantRatingService;
+        private readonly IServiceRepository<EFollowers> _followerService;
         private readonly FileUpload _fileUpload;
         public UserPostService(IServiceFactory factory, FileUpload fileUpload)
         {
@@ -29,6 +33,7 @@ namespace Foodie.Services.Post
             _hashTagsService = _factory.GetInstance<EHashTags>();
             _postHashTagsService = _factory.GetInstance<EPostHashTags>();
             _restaurantRatingService = _factory.GetInstance<ERestaurantRatings>();
+            _followerService = _factory.GetInstance<EFollowers>();
             _fileUpload = fileUpload;
         }
 
@@ -407,5 +412,95 @@ namespace Foodie.Services.Post
                 };
             }
         }
+        public IResult<ListVM<UserPostVM>> GetFeed(int userId, int page, int pageSize)
+        {
+            try
+            {
+                var postLikes = _factory.GetInstance<EPostLikes>();
+                var postComments = _factory.GetInstance<EPostComments>();
+
+                var feed = _userPostService.List()
+                    .Where(p => _followerService.List().Any(f => f.FollowerId == userId && f.FolloweeId == p.UserId));
+                
+                var feedList = feed.Include(p => p.Media)
+                    .OrderByDescending(p => p.CreatedAt)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .Select(feed => new UserPostVM
+                    {
+                        Id = feed.Id,
+                        UserId = feed.UserId,
+                        Content = feed.Content,
+                        CreatedAt = feed.CreatedAt,
+                        UpdatedAt = feed.UpdatedAt,
+                        MediaUrls = feed.Media.Select(m => m.MediaUrl).ToList(),
+                        TaggedUsers = _userTagsService.List().Include(x => x.Users)
+                                .Where(p => p.PostId == feed.Id)
+                                .Select(t => new TaggedUserVM
+                                {
+                                    TaggedUserId = t.TaggedUserId,
+                                    TaggedUserName = t.Users.UserName
+                                }).ToList(),
+                        Hashtags = _postHashTagsService.List()
+                                .Include(x => x.HashTags)
+                                .Where(p => p.PostId == feed.Id)
+                                .Select(t => new HashTagVM
+                                {
+                                    HashTagId = t.HashTagId,
+                                    HashTag = t.HashTags.Tag
+                                }).ToList(),
+                        RestaurantRating = _restaurantRatingService.List().FirstOrDefault(r => r.PostId == feed.Id).Score == null
+                                ? null : _restaurantRatingService.List().FirstOrDefault(r => r.PostId == feed.Id).Score,
+                        RestaurantRatingType = _restaurantRatingService.List().FirstOrDefault(r => r.PostId == feed.Id).RatingType == null
+                                ? null : _restaurantRatingService.List().FirstOrDefault(r => r.PostId == feed.Id).RatingType,
+                        RestaurantId = _restaurantRatingService.List().FirstOrDefault(r => r.PostId == feed.Id).RestaurantId == null
+                                ? null : _restaurantRatingService.List().FirstOrDefault(r => r.PostId == feed.Id).RestaurantId,
+                        LikesCount = postLikes.List().Count(l => l.PostId == feed.Id),
+                        CommentsCount = postComments.List().Count(l => l.PostId == feed.Id)
+                    })
+                    .ToList();
+
+                return new IResult<ListVM<UserPostVM>>
+                {
+                    Data = new ListVM<UserPostVM>
+                    {
+                        List = feedList,
+                    },
+                    Message = "Feed retrieved successfully.",
+                    Status = ResultStatus.Success
+                };
+            }
+            catch (Exception ex)
+            {
+                return new IResult<ListVM<UserPostVM>>
+                {
+                    Message = "Failed to retrieve Feed.",
+                    Status = ResultStatus.Failure
+                };
+            }
+        }
+
+        //public IResult<ListVM<UserPostVM>> GetFeed(int userId)
+        //{
+        //    var followingIds = _followerService.List()
+        //        .Where(f => f.FollowerId == userId)
+        //        .Select(f => f.FolloweeId)
+        //        .ToList();
+
+        //    var feed = _userPostService.List()
+        //        .Where(p => followingIds.Contains(p.UserId))
+        //        .OrderByDescending(p => p.CreatedAt)
+        //        .ToList();
+
+        //    return new IResult<ListVM<UserPostVM>>
+        //    {
+        //        Data = new ListVM<UserPostVM>
+        //        {
+        //            List = feed,
+        //        },
+        //        Message = "UserPosts retrieved successfully.",
+        //        Status = ResultStatus.Success
+        //    };
+        //}
     }
 }
