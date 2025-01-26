@@ -37,5 +37,6 @@ namespace Foodie.Models
         public DbSet<EPostLikes> PostLikes { get; set; }
         public DbSet<EPostComments> PostComments { get; set; }
         public DbSet<EFollowers> Followers { get; set; }
+        public DbSet<ERestaurantRatings> RestaurantRatings { get; set; }
     }
 }

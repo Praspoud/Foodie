@@ -21,7 +21,9 @@ namespace Foodie.Apis.Posts
             app.MapDelete(root, DeletePost);
         }
 
-        private static IResult<int> CreatePost(HttpRequest request, IUserPostService service, IFoodieSessionAccessor accessor, [FromForm] string? Content, [FromForm] List<int>? TaggedUserIds, [FromForm] List<string>? Hashtags, [FromForm] List<IFormFile>? Files)
+        private static IResult<int> CreatePost(HttpRequest request, IUserPostService service, IFoodieSessionAccessor accessor,
+            [FromForm] string? Content, [FromForm] List<int>? TaggedUserIds, [FromForm] List<string>? Hashtags, [FromForm] List<IFormFile>? Files,
+            [FromForm] string? RestaurantId, [FromForm] string? RestaurantRatingType, [FromForm] int? RestaurantRating)
         {
             var content = string.IsNullOrWhiteSpace(Content) ? null : Content;
 
@@ -46,6 +48,13 @@ namespace Foodie.Apis.Posts
             var files = Files ?? (request.Form.Files.Count > 0
                                     ? request.Form.Files.ToList()
                                     : new List<IFormFile>());
+
+            var restaurantId = string.IsNullOrWhiteSpace(RestaurantId) ? null : RestaurantId;
+
+            var restaurantRatingType = string.IsNullOrWhiteSpace(RestaurantRatingType) ? null : RestaurantRatingType;
+
+            var restaurantRating = RestaurantRating != 0 ? RestaurantRating : null;
+
             //var content = request.Form["Content"];
             //var taggedUserIds = request.Form["TaggedUserIds"].ToString().Split(',').Select(int.Parse).ToList();
             //var hashtags = request.Form["Hashtags"].ToString().Split(',').ToList();
@@ -56,7 +65,10 @@ namespace Foodie.Apis.Posts
                 Content = content,
                 TaggedUserIds = taggedUserIds,
                 Hashtags = hashtags,
-                MediaFiles = files
+                MediaFiles = files,
+                RestaurantId = restaurantId,
+                RestaurantRatingType = restaurantRatingType,
+                RestaurantRating = restaurantRating,
             };
 
             return service.CreatePost(model, accessor.UserId);
@@ -72,7 +84,9 @@ namespace Foodie.Apis.Posts
             return service.GetUserPosts(accessor.UserId, skip, take);
         }
 
-        private static IResult<int> UpdatePost(HttpRequest request, IUserPostService service, IFoodieSessionAccessor accessor, int postId, [FromForm] string? Content, [FromForm] List<int>? TaggedUserIds, [FromForm] List<string>? Hashtags, [FromForm] List<IFormFile>? Files)
+        private static IResult<int> UpdatePost(HttpRequest request, IUserPostService service, IFoodieSessionAccessor accessor, int postId, 
+            [FromForm] string? Content, [FromForm] List<int>? TaggedUserIds, [FromForm] List<string>? Hashtags, [FromForm] List<IFormFile>? Files,
+            [FromForm] string? RestaurantId, [FromForm] string? RestaurantRatingType, [FromForm] int? RestaurantRating)
         {
             var content = string.IsNullOrWhiteSpace(Content) ? null : Content;
 
@@ -97,6 +111,13 @@ namespace Foodie.Apis.Posts
             var files = Files ?? (request.Form.Files.Count > 0
                                     ? request.Form.Files.ToList()
                                     : null);
+
+            var restaurantId = string.IsNullOrWhiteSpace(RestaurantId) ? null : RestaurantId;
+
+            var restaurantRatingType = string.IsNullOrWhiteSpace(RestaurantRatingType) ? null : RestaurantRatingType;
+
+            var restaurantRating = RestaurantRating != 0 ? RestaurantRating : null;
+
             //var content = request.Form["Content"];
             //var taggedUserIds = request.Form["TaggedUserIds"].ToString().Split(',').Select(int.Parse).ToList();
             //var hashtags = request.Form["Hashtags"].ToString().Split(',').ToList();
@@ -107,7 +128,10 @@ namespace Foodie.Apis.Posts
                 Content = content,
                 TaggedUserIds = taggedUserIds,
                 Hashtags = hashtags,
-                MediaFiles = files
+                MediaFiles = files,
+                RestaurantId = restaurantId,
+                RestaurantRatingType = restaurantRatingType,
+                RestaurantRating = restaurantRating,
             };
 
             return service.UpdatePost(postId, model, accessor.UserId);

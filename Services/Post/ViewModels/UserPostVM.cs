@@ -6,6 +6,9 @@
         public List<int>? TaggedUserIds { get; set; }
         public List<string>? Hashtags { get; set; }
         public List<IFormFile>? MediaFiles { get; set; } = new();
+        public int? RestaurantRating { get; set; }
+        public string? RestaurantRatingType { get; set; }
+        public string? RestaurantId { get; set; }
     }
 
     public class UserPostVM
@@ -18,6 +21,9 @@
         public List<string> MediaUrls { get; set; } = new();
         public List<TaggedUserVM>? TaggedUsers { get; set; }
         public List<HashTagVM>? Hashtags { get; set; }
+        public int? RestaurantRating { get; set; }
+        public string? RestaurantRatingType { get; set; }
+        public string? RestaurantId { get; set; }
         public int LikesCount { get; set; }
         public int CommentsCount { get; set; }
     }

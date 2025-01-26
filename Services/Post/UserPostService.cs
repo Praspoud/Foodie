@@ -2,10 +2,10 @@
 using System.Diagnostics.Eventing.Reader;
 using Foodie.Common.Models;
 using Foodie.Common.Services;
-using Foodie.Migrations;
 using Foodie.Models;
 using Foodie.Services.Post.ViewModels;
 using Foodie.Services.Restaurant.ViewModels;
+using Foodie.Services.User.ViewModels;
 using Lucene.Net.Support;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
@@ -19,6 +19,7 @@ namespace Foodie.Services.Post
         private readonly IServiceRepository<EUserTags> _userTagsService;
         private readonly IServiceRepository<EHashTags> _hashTagsService;
         private readonly IServiceRepository<EPostHashTags> _postHashTagsService;
+        private readonly IServiceRepository<ERestaurantRatings> _restaurantRatingService;
         private readonly FileUpload _fileUpload;
         public UserPostService(IServiceFactory factory, FileUpload fileUpload)
         {
@@ -27,6 +28,7 @@ namespace Foodie.Services.Post
             _userTagsService = _factory.GetInstance<EUserTags>();
             _hashTagsService = _factory.GetInstance<EHashTags>();
             _postHashTagsService = _factory.GetInstance<EPostHashTags>();
+            _restaurantRatingService = _factory.GetInstance<ERestaurantRatings>();
             _fileUpload = fileUpload;
         }
 
@@ -94,6 +96,20 @@ namespace Foodie.Services.Post
                     }
                 }
 
+                if (model.RestaurantRating != 0 && model.RestaurantRatingType != null && model.RestaurantId != null)
+                {
+                    var rating =  new ERestaurantRatings
+                    {
+                        PostId = post.Id,
+                        UserId = UserId,
+                        RestaurantId = model.RestaurantId,
+                        RatingType = model.RestaurantRatingType,
+                        Score = model.RestaurantRating
+                    };
+
+                    _restaurantRatingService.Add(rating);
+                }
+
                 _factory.CommitTransaction();
 
                 return new IResult<int>
@@ -122,6 +138,7 @@ namespace Foodie.Services.Post
                 var postComments = _factory.GetInstance<EPostComments>();
 
                 var post = _userPostService.List().FirstOrDefault(p => p.Id == postId);
+                var rating = _restaurantRatingService.List().FirstOrDefault(r => r.PostId == postId);
 
                 if (post == null)
                 {
@@ -155,6 +172,9 @@ namespace Foodie.Services.Post
                                 HashTagId = t.HashTagId,
                                 HashTag = t.HashTags.Tag
                             }).ToList(),
+                    RestaurantRating = rating == null ? null : rating.Score,
+                    RestaurantRatingType = rating == null ? null : rating.RatingType,
+                    RestaurantId = rating == null ? null : rating.RestaurantId,
                     LikesCount = postLikes.List().Count(l => l.PostId == postId),
                     CommentsCount = postComments.List().Count(l => l.PostId == postId),
                 };
@@ -184,6 +204,7 @@ namespace Foodie.Services.Post
                 var postComments = _factory.GetInstance<EPostComments>();
 
                 var userPosts = _userPostService.List().Where(p => p.UserId == userId);
+                var rating = _restaurantRatingService.List().Where(r => r.UserId == userId);
 
                 var userPostList = userPosts.Include(p => p.Media)
                     .OrderByDescending(p => p.CreatedAt)
@@ -212,6 +233,12 @@ namespace Foodie.Services.Post
                                 HashTagId = t.HashTagId,
                                 HashTag = t.HashTags.Tag
                             }).ToList(),
+                        RestaurantRating = _restaurantRatingService.List().FirstOrDefault(r => r.PostId == userPosts.Id).Score == null 
+                            ? null : _restaurantRatingService.List().FirstOrDefault(r => r.PostId == userPosts.Id).Score,
+                        RestaurantRatingType = _restaurantRatingService.List().FirstOrDefault(r => r.PostId == userPosts.Id).RatingType == null
+                            ? null : _restaurantRatingService.List().FirstOrDefault(r => r.PostId == userPosts.Id).RatingType,
+                        RestaurantId = _restaurantRatingService.List().FirstOrDefault(r => r.PostId == userPosts.Id).RestaurantId == null
+                            ? null : _restaurantRatingService.List().FirstOrDefault(r => r.PostId == userPosts.Id).RestaurantId,
                         LikesCount = postLikes.List().Count(l => l.PostId == userPosts.Id),
                         CommentsCount = postComments.List().Count(l => l.PostId == userPosts.Id)
                     }).ToList();
@@ -304,6 +331,23 @@ namespace Foodie.Services.Post
                             HashTagId = hashtag.Id
                         });
                     }
+                }
+
+                if (model.RestaurantRating != 0 && model.RestaurantRatingType != null && model.RestaurantId != null)
+                {
+                    var restaurantRating = _restaurantRatingService.List().FirstOrDefault(r => r.PostId == postId);
+                    _restaurantRatingService.Remove(restaurantRating);
+
+                    var rating = new ERestaurantRatings
+                    {
+                        PostId = post.Id,
+                        UserId = userId,
+                        RestaurantId = model.RestaurantId,
+                        RatingType = model.RestaurantRatingType,
+                        Score = model.RestaurantRating
+                    };
+
+                    _restaurantRatingService.Add(rating);
                 }
                 _factory.CommitTransaction();
 
