@@ -13,7 +13,7 @@ namespace Foodie
             AdminApi.RegisterApi(app);
             RestaurantApi.RegisterApi(app);
             UserPostApi.RegisterApi(app);
-            PostLikeApi.RegisterApi(app);
+            PostReactionApi.RegisterApi(app);
             PostCommentApi.RegisterApi(app);
             FollowerApi.RegisterApi(app);
         }

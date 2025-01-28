@@ -25,7 +25,6 @@ builder.Services.AddControllers();
 builder.Services.AddTransient<IServiceFactory, ServiceFactory>();
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<IFoodieSessionAccessor, FoodieSessionAccessor>();
-//builder.Services.AddTransient<IRiddhaSessionAccessor, RiddhaSessionAccessor>();
 builder.RegisterServices();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

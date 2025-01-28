@@ -24,7 +24,7 @@
         public int? RestaurantRating { get; set; }
         public string? RestaurantRatingType { get; set; }
         public string? RestaurantId { get; set; }
-        public int LikesCount { get; set; }
+        public int ReactionsCount { get; set; }
         public int CommentsCount { get; set; }
     }
 

@@ -139,7 +139,7 @@ namespace Foodie.Services.Post
         {
             try
             {
-                var postLikes = _factory.GetInstance<EPostLikes>();
+                var postReactions = _factory.GetInstance<EPostReactions>();
                 var postComments = _factory.GetInstance<EPostComments>();
 
                 var post = _userPostService.List().FirstOrDefault(p => p.Id == postId);
@@ -180,7 +180,7 @@ namespace Foodie.Services.Post
                     RestaurantRating = rating == null ? null : rating.Score,
                     RestaurantRatingType = rating == null ? null : rating.RatingType,
                     RestaurantId = rating == null ? null : rating.RestaurantId,
-                    LikesCount = postLikes.List().Count(l => l.PostId == postId),
+                    ReactionsCount = postReactions.List().Count(l => l.PostId == postId),
                     CommentsCount = postComments.List().Count(l => l.PostId == postId),
                 };
 
@@ -205,7 +205,7 @@ namespace Foodie.Services.Post
         {
             try
             {
-                var postLikes = _factory.GetInstance<EPostLikes>();
+                var postReactions = _factory.GetInstance<EPostReactions>();
                 var postComments = _factory.GetInstance<EPostComments>();
 
                 var userPosts = _userPostService.List().Where(p => p.UserId == userId);
@@ -244,7 +244,7 @@ namespace Foodie.Services.Post
                             ? null : _restaurantRatingService.List().FirstOrDefault(r => r.PostId == userPosts.Id).RatingType,
                         RestaurantId = _restaurantRatingService.List().FirstOrDefault(r => r.PostId == userPosts.Id).RestaurantId == null
                             ? null : _restaurantRatingService.List().FirstOrDefault(r => r.PostId == userPosts.Id).RestaurantId,
-                        LikesCount = postLikes.List().Count(l => l.PostId == userPosts.Id),
+                        ReactionsCount = postReactions.List().Count(l => l.PostId == userPosts.Id),
                         CommentsCount = postComments.List().Count(l => l.PostId == userPosts.Id)
                     }).ToList();
 
@@ -416,7 +416,7 @@ namespace Foodie.Services.Post
         {
             try
             {
-                var postLikes = _factory.GetInstance<EPostLikes>();
+                var postReactions = _factory.GetInstance<EPostReactions>();
                 var postComments = _factory.GetInstance<EPostComments>();
 
                 var feed = _userPostService.List()
@@ -455,7 +455,7 @@ namespace Foodie.Services.Post
                                 ? null : _restaurantRatingService.List().FirstOrDefault(r => r.PostId == feed.Id).RatingType,
                         RestaurantId = _restaurantRatingService.List().FirstOrDefault(r => r.PostId == feed.Id).RestaurantId == null
                                 ? null : _restaurantRatingService.List().FirstOrDefault(r => r.PostId == feed.Id).RestaurantId,
-                        LikesCount = postLikes.List().Count(l => l.PostId == feed.Id),
+                        ReactionsCount = postReactions.List().Count(l => l.PostId == feed.Id),
                         CommentsCount = postComments.List().Count(l => l.PostId == feed.Id)
                     })
                     .ToList();

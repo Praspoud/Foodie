@@ -34,7 +34,7 @@ namespace Foodie.Models
         public DbSet<EUserTags> UserTags { get; set; }
         public DbSet<EHashTags> HashTags { get; set; }
         public DbSet<EPostHashTags> PostHashTags { get; set; }
-        public DbSet<EPostLikes> PostLikes { get; set; }
+        public DbSet<EPostReactions> PostLikes { get; set; }
         public DbSet<EPostComments> PostComments { get; set; }
         public DbSet<EFollowers> Followers { get; set; }
         public DbSet<ERestaurantRatings> RestaurantRatings { get; set; }

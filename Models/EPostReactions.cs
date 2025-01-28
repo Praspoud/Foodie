@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Foodie.Models
 {
-    [Table("post_likes")]
-    public class EPostLikes
+    [Table("post_reactions")]
+    public class EPostReactions
     {
         [Key]
         [Column("id")]
@@ -18,12 +18,23 @@ namespace Foodie.Models
         [ForeignKey("UserPosts")]
         public int PostId { get; set; }
 
-        [Column("liked_at")]
-        public DateTime LikedAt { get; set; }
+        [Column("reaction_type")]
+        public ReactionType ReactionType { get; set; }
+
+        [Column("reacted_at")]
+        public DateTime ReactedAt { get; set; }
 
         public virtual EUsers Users { get; set; }
         public virtual EUserPosts UserPosts { get; set; }
+    }
 
-
+    public enum ReactionType
+    {
+        Like,
+        Love,
+        Haha,
+        Wow,
+        Sad,
+        Angry
     }
 }
