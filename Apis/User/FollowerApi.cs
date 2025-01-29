@@ -15,8 +15,7 @@ namespace Foodie.Apis.User
             app.MapDelete(root + "unfollow/", UnFollowUser);
             app.MapGet(root + "followerslist/", GetFollowersList);
             app.MapGet(root + "followingslist/", GetFollowingsList);
-            //app.MapPut(root, EditComment);
-            //app.MapDelete(root, DeleteComment);
+            app.MapGet(root + "mutualfollowerslist/", GetMutualFollowers);
         }
 
         private static IResult<int> FollowUser(IFollowerService service, IFoodieSessionAccessor accessor, int followeeId)
@@ -36,6 +35,11 @@ namespace Foodie.Apis.User
         private static IResult<ListVM<FollowVM>> GetFollowingsList(IFollowerService service, IFoodieSessionAccessor accessor)
         {
             return service.GetFollowingsList(accessor.UserId);
+        }
+
+        private static IResult<ListVM<FollowVM>> GetMutualFollowers(IFollowerService service, IFoodieSessionAccessor accessor, int otherUserId)
+        {
+            return service.GetMutualFollowers(accessor.UserId, otherUserId);
         }
     }
 }

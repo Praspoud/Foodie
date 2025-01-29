@@ -99,6 +99,7 @@ namespace Foodie.Services.User
                 var followers = _followersService.List().Where(f => f.FolloweeId == userId);
                 var followersList = followers.Select(f => new FollowVM
                 {
+                    Id = f.FollowerUsers.Id,
                     UserName = f.FollowerUsers.UserName,
                     FirstName = f.FollowerUsers.FirstName,
                     LastName = f.FollowerUsers.LastName,
@@ -132,6 +133,7 @@ namespace Foodie.Services.User
                 var followings = _followersService.List().Where(f => f.FollowerId == userId);
                 var followingsList = followings.Select(f => new FollowVM
                 {
+                    Id = f.FolloweeUsers.Id,
                     UserName = f.FolloweeUsers.UserName,
                     FirstName = f.FolloweeUsers.FirstName,
                     LastName = f.FolloweeUsers.LastName,
@@ -154,6 +156,58 @@ namespace Foodie.Services.User
                 {
                     Status = ResultStatus.Failure,
                     Message = "Failed to retrieve followings."
+                };
+            }
+        }
+
+        public IResult<ListVM<FollowVM>> GetMutualFollowers(int userId, int otherUserId)
+        {
+            try
+            {
+                var userFollowers = _followersService.List()
+                    .Where(f => f.FolloweeId == userId)
+                    .Select(f => new FollowVM
+                    {
+                        Id = f.FollowerUsers.Id,
+                        UserName = f.FollowerUsers.UserName,
+                        FirstName = f.FollowerUsers.FirstName,
+                        LastName = f.FollowerUsers.LastName,
+                    })
+                    .ToList();
+
+                var otherUserFollowers = _followersService.List()
+                    .Where(f => f.FolloweeId == otherUserId)
+                    .Select(f => new FollowVM
+                    {
+                        Id = f.FollowerUsers.Id,
+                        UserName = f.FollowerUsers.UserName,
+                        FirstName = f.FollowerUsers.FirstName,
+                        LastName = f.FollowerUsers.LastName,
+                    })
+                    .ToList();
+
+                //var mutual = userFollowers.Intersect(otherUserFollowers).ToList();
+                var mutual = userFollowers
+                    .Where(uf => otherUserFollowers.Any(of => of.Id == uf.Id))
+                    .ToList();
+
+                return new IResult<ListVM<FollowVM>>
+                {
+                    Data = new ListVM<FollowVM>
+                    {
+                        List = mutual,
+                        Count = mutual.Count()
+                    },
+                    Message = "Mutual Followers retrieved successfully.",
+                    Status = ResultStatus.Success
+                };
+            }
+            catch (Exception ex)
+            {
+                return new IResult<ListVM<FollowVM>>
+                {
+                    Message = "Mutual Followers retrieve failed.",
+                    Status = ResultStatus.Failure
                 };
             }
         }

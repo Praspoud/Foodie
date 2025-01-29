@@ -10,5 +10,6 @@ namespace Foodie.Services.User
         IResult<bool> UnFollowUser(int followerId, int followeeId);
         IResult<ListVM<FollowVM>> GetFollowersList(int userId);
         IResult<ListVM<FollowVM>> GetFollowingsList(int userId);
+        IResult<ListVM<FollowVM>> GetMutualFollowers(int userId, int otherUserId);
     }
 }
