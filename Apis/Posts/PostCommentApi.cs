@@ -15,11 +15,13 @@ namespace Foodie.Apis.Posts
             app.MapPut(root, EditComment);
             app.MapDelete(root, DeleteComment);
             app.MapGet(root + "list/", GetCommentsForPost);
+            app.MapGet(root + "{commentId}/replies/", GetCommentRepliesForPost);
+            app.MapPost(root + "{commentId}/report", ReportComment);
         }
 
-        private static IResult<int> AddComment(IPostCommentService service, IFoodieSessionAccessor accessor, int postId, string content)
+        private static IResult<int> AddComment(IPostCommentService service, IFoodieSessionAccessor accessor, int? parentCommentId, int postId, string content)
         {
-            return service.AddComment(accessor.UserId, postId, content);
+            return service.AddComment(accessor.UserId, postId, parentCommentId, content);
         }
 
         private static IResult<int> EditComment(IPostCommentService service, IFoodieSessionAccessor accessor, string newContent, int commentId)
@@ -35,6 +37,16 @@ namespace Foodie.Apis.Posts
         private static IResult<ListVM<PostCommentVM>> GetCommentsForPost(IPostCommentService service, int postId)
         {
             return service.GetCommentsForPost(postId);
+        }
+        
+        private static IResult<ListVM<PostCommentVM>> GetCommentRepliesForPost(IPostCommentService service, int commentId)
+        {
+            return service.GetCommentRepliesForPost(commentId);
+        }
+
+        private static IResult<bool> ReportComment(IPostCommentService service, IFoodieSessionAccessor accessor, int commentId)
+        {
+            return service.ReportComment(commentId, accessor.UserId);
         }
     }
 }

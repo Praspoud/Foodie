@@ -18,6 +18,7 @@ namespace Foodie
             builder.Services.AddTransient<IPostCommentService, PostCommentService>();
             builder.Services.AddTransient<IFollowerService, FollowerService>();
             builder.Services.AddSingleton<FileUpload>();
+            builder.Services.AddSingleton<MentionExtractor>();
         }
     }
 }
