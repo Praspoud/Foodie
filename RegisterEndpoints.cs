@@ -16,6 +16,7 @@ namespace Foodie
             PostReactionApi.RegisterApi(app);
             PostCommentApi.RegisterApi(app);
             FollowerApi.RegisterApi(app);
+            UserBlockApi.RegisterApi(app);
         }
     }
 }

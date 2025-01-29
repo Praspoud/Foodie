@@ -33,4 +33,22 @@ namespace Foodie.Models
         [Column("tran_date")]
         public DateTime TranDate { get; set; }
     }
+
+    [Table("blocked_users")]
+    public class EBlockedUsers
+    {
+        [Key]
+        [Column("id")]
+        public int Id { get; set; }
+
+        [Column("blocker_id")]
+        public int BlockerId { get; set; }
+        public virtual EUsers Blocker { get; set; }
+
+        [Column("blocked_id")]
+        public int BlockedId { get; set; }
+        public virtual EUsers Blocked { get; set; }
+
+        public DateTime BlockedAt { get; set; } = DateTime.UtcNow;
+    }
 }

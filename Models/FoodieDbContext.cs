@@ -38,6 +38,7 @@ namespace Foodie.Models
         public DbSet<EPostComments> PostComments { get; set; }
         public DbSet<EUserMentions> UserMentions { get; set; }
         public DbSet<EFollowers> Followers { get; set; }
+        public DbSet<EBlockedUsers> BlockedUsers { get; set; }
         public DbSet<ERestaurantRatings> RestaurantRatings { get; set; }
     }
 }
