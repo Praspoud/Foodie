@@ -125,12 +125,24 @@ namespace Foodie.Services.Post
         {
             var reaction = _postReactService.List().Any(l => l.UserId == userId && l.PostId == postId);
 
-            return new IResult<bool>
+            if (reaction == true)
             {
-                Data = reaction,
-                Message = "Reaction retrieved successfully.",
-                Status = ResultStatus.Success
-            };
+                return new IResult<bool>
+                {
+                    Data = reaction,
+                    Message = "Reacted.",
+                    Status = ResultStatus.Success
+                };
+            }
+            else
+            {
+                return new IResult<bool>
+                {
+                    Data = reaction,
+                    Message = "Not Reacted.",
+                    Status = ResultStatus.Failure
+                };
+            }
         }
     }
 }
