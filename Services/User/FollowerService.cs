@@ -12,11 +12,13 @@ namespace Foodie.Services.User
     {
         private readonly IServiceFactory _factory;
         private readonly IServiceRepository<EFollowers> _followersService;
+        private readonly IServiceRepository<EBlockedUsers> _blockedUserService;
 
         public FollowerService(IServiceFactory factory)
         {
             _factory = factory;
             _followersService = _factory.GetInstance<EFollowers>();
+            _blockedUserService = _factory.GetInstance<EBlockedUsers>();
         }
 
         public IResult<int> FollowUser(int followerId, int followeeId)
@@ -24,11 +26,32 @@ namespace Foodie.Services.User
             try
             {
                 var duplicateFollow = _followersService.List().FirstOrDefault(f => f.FollowerId == followerId && f.FolloweeId == followeeId);
-                if (followerId == followeeId || duplicateFollow != null)
+                var isblocked = _blockedUserService.List()
+                    .Any(b => (b.BlockerId == followerId && b.BlockedId == followeeId) ||
+                              (b.BlockerId == followeeId && b.BlockedId == followerId));
+                if (followerId == followeeId)
                 {
                     return new IResult<int>
                     {
-                        Message = "Invalid Follow.",
+                        Message = "Cannot follow oneself.",
+                        Status = ResultStatus.Failure
+                    };
+                }
+
+                if (duplicateFollow != null)
+                {
+                    return new IResult<int>
+                    {
+                        Message = "Already Followed.",
+                        Status = ResultStatus.Failure
+                    };
+                }
+
+                if (isblocked != null)
+                {
+                    return new IResult<int>
+                    {
+                        Message = "One of the user is blocked.",
                         Status = ResultStatus.Failure
                     };
                 }
