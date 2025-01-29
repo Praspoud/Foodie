@@ -47,7 +47,7 @@ namespace Foodie.Services.User
                     };
                 }
 
-                if (isblocked != null)
+                if (isblocked == true)
                 {
                     return new IResult<int>
                     {
